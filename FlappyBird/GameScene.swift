@@ -13,8 +13,8 @@ class GameScene: SKScene {
   // Create a sprite node
   var bird = SKSpriteNode()
   var background = SKSpriteNode()
-  var animationNode = SKSpriteNode()
-
+  var pipeTop = SKSpriteNode()
+  var pipeBottom = SKSpriteNode()
   
   
     override func didMoveToView(view: SKView) {
@@ -66,7 +66,7 @@ class GameScene: SKScene {
       // Repeat the action
       var moveBackgroundForever = SKAction.repeatActionForever(SKAction.sequence([moveBackground,moveBackground2]))
       
-      for var i:CGFloat = 0; i < 3 + self.frame.size.width / ( backgroundImage.size().width * 2 ); i++ {
+      for var i:CGFloat = 0; i < 1 + self.frame.size.width / ( backgroundImage.size().width * 2 ); i++ {
         var backgroundSprite = SKSpriteNode(texture: backgroundImage)
         backgroundSprite.position = CGPoint(x: backgroundImage.size().width / 2 + backgroundImage.size().width * i, y:CGRectGetMidY(self.frame))
         backgroundSprite.size.height = self.frame.height
@@ -74,6 +74,19 @@ class GameScene: SKScene {
         backgroundSprite.runAction(moveBackgroundForever)
         addChild(backgroundSprite)
       }
+      
+      // Create Pipes
+      var pipe1 = SKTexture(imageNamed: "pipe1")
+      pipeTop = SKSpriteNode(texture: pipe1)
+      pipeTop.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMaxY(self.frame))
+      pipeTop.size.height = self.frame.size.height / 2
+      addChild(pipeTop)
+      
+      var pipe2 = SKTexture(imageNamed: "pipe2")
+      pipeBottom = SKSpriteNode(texture: pipe2)
+      pipeBottom.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMinY(self.frame))
+      pipeBottom.size.height = self.frame.size.height / 2
+      addChild(pipeBottom)
       
     }
     
