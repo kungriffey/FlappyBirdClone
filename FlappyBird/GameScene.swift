@@ -13,6 +13,8 @@ class GameScene: SKScene {
   // Create a sprite node
   var bird = SKSpriteNode()
   var background = SKSpriteNode()
+  var animationNode = SKSpriteNode()
+
   
   
     override func didMoveToView(view: SKView) {
@@ -56,11 +58,27 @@ class GameScene: SKScene {
       // Set the background height to be the height of the frame
       background.size.height = self.frame.size.height
       addChild(background)
+      
+      // Move the Background
+      var moveBackground = SKAction.moveByX(-backgroundImage.size().width, y: 0, duration: 5)
+      // Second Background
+      var moveBackground2 = SKAction.moveByX(backgroundImage.size().width, y: 0, duration: 0)
+      // Repeat the action
+      var moveBackgroundForever = SKAction.repeatActionForever(SKAction.sequence([moveBackground,moveBackground2]))
+      
+      for var i:CGFloat = 0; i < 3 + self.frame.size.width / ( backgroundImage.size().width * 2 ); i++ {
+        var backgroundSprite = SKSpriteNode(texture: backgroundImage)
+        backgroundSprite.position = CGPoint(x: backgroundImage.size().width / 2 + backgroundImage.size().width * i, y:CGRectGetMidY(self.frame))
+        backgroundSprite.size.height = self.frame.height
+        
+        backgroundSprite.runAction(moveBackgroundForever)
+        addChild(backgroundSprite)
+      }
+      
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         /* Called when a touch begins */
-        println("Flappy is Flying")
         bird.physicsBody?.velocity = CGVectorMake(0, 0)
         bird.physicsBody?.applyImpulse(CGVectorMake(0, 50))
         for touch in (touches as! Set<UITouch>) {
@@ -69,6 +87,8 @@ class GameScene: SKScene {
           if location == bird.position {
             println("Flappy is touched")
           }
+          
+          
             
         }
     }
