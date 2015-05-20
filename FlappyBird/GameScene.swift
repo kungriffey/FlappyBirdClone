@@ -44,7 +44,7 @@ class GameScene: SKScene {
       // Create ground object
       var ground = SKNode()
       // Set ground position
-      ground.position = CGPointMake(0, 0)
+      ground.position = CGPointMake(CGRectGetMidX(self.frame), 0)
       // Set the Physics
       ground.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(self.frame.size.width, 20))
       ground.physicsBody?.dynamic = false
@@ -61,7 +61,8 @@ class GameScene: SKScene {
       // Repeat the action
       var moveBackgroundForever = SKAction.repeatActionForever(SKAction.sequence([moveBackground,moveBackground2]))
       
-      for var i:CGFloat = 0; i < 1 + self.frame.size.width / ( backgroundImage.size().width * 2 ); i++ {
+      for var i:CGFloat = 0; i < 3; i++ {
+        //+ self.frame.size.width / ( backgroundImage.size().width * 2 )
         var backgroundSprite = SKSpriteNode(texture: backgroundImage)
         backgroundSprite.position = CGPoint(x: backgroundImage.size().width / 2 + backgroundImage.size().width * i, y:CGRectGetMidY(self.frame))
         backgroundSprite.size.height = self.frame.height
