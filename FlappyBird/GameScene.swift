@@ -30,6 +30,12 @@ class GameScene: SKScene {
       var makeBirdFlap = SKAction.repeatActionForever(animation)
       bird.runAction(makeBirdFlap)
       
+      // Create Physics
+      bird.physicsBody = SKPhysicsBody(circleOfRadius: bird.size.height / 2)
+      
+      // No Rotation
+      bird.physicsBody?.allowsRotation = false
+      
       addChild(bird)
 
     }
