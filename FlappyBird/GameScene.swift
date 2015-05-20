@@ -48,17 +48,12 @@ class GameScene: SKScene {
       // Set the Physics
       ground.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(self.frame.size.width, 20))
       ground.physicsBody?.dynamic = false
+      ground.zPosition = 4
       addChild(ground)
       addChild(bird)
       
-      //Add the Background
+      //Add the Background Texture
       var backgroundImage = SKTexture(imageNamed: "bg")
-      background = SKSpriteNode(texture: backgroundImage)
-      background.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame))
-      // Set the background height to be the height of the frame
-      background.size.height = self.frame.size.height
-      addChild(background)
-      
       // Move the Background
       var moveBackground = SKAction.moveByX(-backgroundImage.size().width, y: 0, duration: 5)
       // Second Background
@@ -80,13 +75,24 @@ class GameScene: SKScene {
       pipeTop = SKSpriteNode(texture: pipe1)
       pipeTop.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMaxY(self.frame))
       pipeTop.size.height = self.frame.size.height / 2
+      pipeTop.physicsBody = SKPhysicsBody(rectangleOfSize:pipeTop.size)
+      pipeTop.physicsBody?.dynamic = false
+      pipeTop.physicsBody?.categoryBitMask
+      var movePipeTop = SKAction.repeatActionForever(SKAction.moveByX(-100, y: 0, duration: 1))
+      pipeTop.runAction(movePipeTop)
       addChild(pipeTop)
       
       var pipe2 = SKTexture(imageNamed: "pipe2")
       pipeBottom = SKSpriteNode(texture: pipe2)
       pipeBottom.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMinY(self.frame))
       pipeBottom.size.height = self.frame.size.height / 2
+      pipeBottom.physicsBody = SKPhysicsBody(rectangleOfSize:pipeBottom.size)
+      pipeBottom.physicsBody?.dynamic = false
+      var movePipeBottom = SKAction.repeatActionForever(SKAction.moveByX(-100, y: 0, duration: 1))
+      pipeBottom.runAction(movePipeBottom)
       addChild(pipeBottom)
+      
+
       
     }
     
@@ -98,7 +104,7 @@ class GameScene: SKScene {
             let location = touch.locationInNode(self)
           
           if location == bird.position {
-            println("Flappy is touched")
+            //println("Flappy is touched")
           }
           
           
