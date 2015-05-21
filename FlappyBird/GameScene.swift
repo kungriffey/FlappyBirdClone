@@ -42,14 +42,13 @@ class GameScene: SKScene {
       var ground = SKNode()
       // Set ground position
       ground.position = CGPointMake(CGRectGetMidX(self.frame), 0)
-      // Set the Physics
       ground.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(self.frame.size.width, 10))
       ground.physicsBody?.dynamic = false
       
       // Create sky object
       var sky = SKNode()
-     sky.position = CGPointMake(10, CGRectGetMaxY(self.frame))
-     sky.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(self.frame.size.width, 5))
+      sky.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMaxY(self.frame))
+      sky.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(self.frame.size.width, 5))
       sky.physicsBody?.dynamic = false
 
       addChild(ground)
@@ -64,7 +63,7 @@ class GameScene: SKScene {
       var moveBackground2 = SKAction.moveByX(backgroundImage.size().width, y: 0, duration: 0)
       // Repeat the action
       var moveBackgroundForever = SKAction.repeatActionForever(SKAction.sequence([moveBackground,moveBackground2]))
-      
+      // Moving the background image - we use 3 because the image needs to be scaled 3x
       for var i:CGFloat = 0; i < 3; i++ {
         //+ self.frame.size.width / ( backgroundImage.size().width * 2 )
         var backgroundSprite = SKSpriteNode(texture: backgroundImage)
