@@ -8,11 +8,18 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
   
   // Create a sprite node
   var bird = SKSpriteNode()
   var background = SKSpriteNode()
+  let birdCategory:UInt32 = 0x1 << 0
+  let groundCategory:UInt32 = 0x1 << 1
+  let pipeCategory:UInt32 = 0x1 << 2
+  let gapCategory:UInt32 = 0x1 << 3
+
+  
+  
   
   
     override func didMoveToView(view: SKView) {
@@ -34,6 +41,8 @@ class GameScene: SKScene {
       bird.physicsBody = SKPhysicsBody(circleOfRadius: bird.size.height / 2)
       bird.physicsBody?.dynamic = true
       bird.physicsBody?.allowsRotation = false
+      bird.physicsBody?.categoryBitMask = birdCategory
+
       bird.zPosition = 5 //higher means closer to the screen - lower is further away
       //pipes are behind the bird so they should be set to 4
       //background should be set to 3
@@ -44,6 +53,7 @@ class GameScene: SKScene {
       ground.position = CGPointMake(CGRectGetMidX(self.frame), 0)
       ground.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(self.frame.size.width, 10))
       ground.physicsBody?.dynamic = false
+      ground.physicsBody?.categoryBitMask = groundCategory
       
       // Create sky object
       var sky = SKNode()
@@ -80,12 +90,9 @@ class GameScene: SKScene {
   
     func makePipes() {
       
-//        var pipeTop = SKSpriteNode()
-//        var pipeBottom = SKSpriteNode()
     
     // Create a Gap
     var gap = bird.frame.size.height * 4
-    
     // Movement amount
     var movementAmount = arc4random() %  UInt32(self.frame.size.height)
     // gap Offset
@@ -100,6 +107,7 @@ class GameScene: SKScene {
     // Create Pipes
     var pipe1 = SKTexture(imageNamed: "pipe1")
     var pipeTop = SKSpriteNode(texture: pipe1)
+      pipeTop.physicsBody?.categoryBitMask = pipeCategory
     pipeTop.position = CGPoint(x: CGRectGetMidX(self.frame) + self.frame.size.width, y: CGRectGetMidY(self.frame) + pipeTop.size.height / 2 + gap / 2 + pipeOffset)
     pipeTop.physicsBody = SKPhysicsBody(rectangleOfSize:pipeTop.size)
     pipeTop.physicsBody?.dynamic = false
@@ -109,11 +117,13 @@ class GameScene: SKScene {
     
     var pipe2 = SKTexture(imageNamed: "pipe2")
     var pipeBottom = SKSpriteNode(texture: pipe2)
+      pipeBottom.physicsBody?.categoryBitMask = pipeCategory
     pipeBottom.position = CGPointMake(CGRectGetMidX(self.frame) + self.frame.size.width, CGRectGetMidY(self.frame) - pipeBottom.size.height / 2 - gap / 2 + pipeOffset)
     pipeBottom.physicsBody = SKPhysicsBody(rectangleOfSize:pipeBottom.size)
     pipeBottom.physicsBody?.dynamic = false
     pipeBottom.runAction(moveAndRemovePipes)
     self.addChild(pipeBottom)
+      
     
   }
   
