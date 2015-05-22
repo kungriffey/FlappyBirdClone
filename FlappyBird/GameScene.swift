@@ -14,6 +14,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   var bird = SKSpriteNode()
   var background = SKSpriteNode()
   var gap = SKSpriteNode()
+  
   let birdCategory:UInt32 = 0x1 << 0
   let groundCategory:UInt32 = 0x1 << 1
   let pipeCategory:UInt32 = 0x1 << 2
@@ -23,7 +24,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       override func didMoveToView(view: SKView) {
       /* Setup your scene here */
         self.physicsWorld.contactDelegate = self
-        playSound("super.mp3", shouldRepeat: true)
+        playSoundFileNamed("super.mp3", shouldRepeat: true)
  
         
       var birdTexture = SKTexture(imageNamed: "flappy1")
@@ -146,11 +147,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   }
   
   // Add sound function
-  func playSound(audio:String, shouldRepeat:Bool)
-  {
-    var sound = SKAction.playSoundFileNamed(audio, waitForCompletion: shouldRepeat)
+  func playSoundFileNamed(soundFile: String, shouldRepeat: Bool) {
+    var sound = SKAction.playSoundFileNamed(soundFile, waitForCompletion: shouldRepeat)
     runAction(sound)
   }
+  
   
   func didBeginContact(contact: SKPhysicsContact){
     
