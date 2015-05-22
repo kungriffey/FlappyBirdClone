@@ -19,11 +19,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   let gapCategory:UInt32 = 0x1 << 3
 
   
-  
-  
-  
-    override func didMoveToView(view: SKView) {
+      override func didMoveToView(view: SKView) {
       /* Setup your scene here */
+        self.physicsWorld.contactDelegate = self
+ 
+        
       var birdTexture = SKTexture(imageNamed: "flappy1")
       // assign texture to the node
       bird = SKSpriteNode(texture: birdTexture)
@@ -42,7 +42,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       bird.physicsBody?.dynamic = true
       bird.physicsBody?.allowsRotation = false
       bird.physicsBody?.categoryBitMask = birdCategory
-
+      bird.physicsBody?.collisionBitMask = pipeCategory
+      bird.physicsBody?.contactTestBitMask = gapCategory | pipeCategory | groundCategory
+        
       bird.zPosition = 5 //higher means closer to the screen - lower is further away
       //pipes are behind the bird so they should be set to 4
       //background should be set to 3
@@ -91,7 +93,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func makePipes() {
       
     
-    // Create a Gap
+    // Create a Gap object for calculation purposes
     var gap = bird.frame.size.height * 4
     // Movement amount
     var movementAmount = arc4random() %  UInt32(self.frame.size.height)
@@ -124,6 +126,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     pipeBottom.runAction(moveAndRemovePipes)
     self.addChild(pipeBottom)
       
+    
+  }
+  
+  func didBeginContact(contact: SKPhysicsContact){
+    
+    if(contact.bodyA.categoryBitMask == gapCategory || contact.bodyB.categoryBitMask == gapCategory) {
+      
+      println("+1")
+      
+    } else {
+      println("Pipe")
+    }
     
   }
   
