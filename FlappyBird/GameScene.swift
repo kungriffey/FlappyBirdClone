@@ -13,6 +13,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // Create a sprite node
   var bird = SKSpriteNode()
   var background = SKSpriteNode()
+  var gap = SKSpriteNode()
   let birdCategory:UInt32 = 0x1 << 0
   let groundCategory:UInt32 = 0x1 << 1
   let pipeCategory:UInt32 = 0x1 << 2
@@ -22,6 +23,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       override func didMoveToView(view: SKView) {
       /* Setup your scene here */
         self.physicsWorld.contactDelegate = self
+        playSound("super.mp3", shouldRepeat: true)
  
         
       var birdTexture = SKTexture(imageNamed: "flappy1")
@@ -63,6 +65,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       sky.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(self.frame.size.width, 5))
       sky.physicsBody?.dynamic = false
 
+      
+      // Add Sound
+      
+
       addChild(ground)
       addChild(sky)
       addChild(bird)
@@ -92,9 +98,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   
     func makePipes() {
       
-    
-    // Create a Gap object for calculation purposes
-    var gap = bird.frame.size.height * 4
     // Movement amount
     var movementAmount = arc4random() %  UInt32(self.frame.size.height)
     // gap Offset
@@ -105,12 +108,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var removePipe = SKAction.removeFromParent()
     // Move and Remove Pipes
     var moveAndRemovePipes = SKAction.sequence([movePipes,removePipe])
-
+      
+    // Create a Gap object for calculation purposes for pipes
+    let gapSize = bird.frame.size.height * 4
+    
     // Create Pipes
     var pipe1 = SKTexture(imageNamed: "pipe1")
     var pipeTop = SKSpriteNode(texture: pipe1)
-      pipeTop.physicsBody?.categoryBitMask = pipeCategory
-    pipeTop.position = CGPoint(x: CGRectGetMidX(self.frame) + self.frame.size.width, y: CGRectGetMidY(self.frame) + pipeTop.size.height / 2 + gap / 2 + pipeOffset)
+    pipeTop.physicsBody?.categoryBitMask = pipeCategory
+    pipeTop.position = CGPoint(x: CGRectGetMidX(self.frame) + self.frame.size.width, y: CGRectGetMidY(self.frame) + pipeTop.size.height / 2 + gapSize / 2 + pipeOffset)
     pipeTop.physicsBody = SKPhysicsBody(rectangleOfSize:pipeTop.size)
     pipeTop.physicsBody?.dynamic = false
     //pipeTop.physicsBody?.categoryBitMask
@@ -120,13 +126,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var pipe2 = SKTexture(imageNamed: "pipe2")
     var pipeBottom = SKSpriteNode(texture: pipe2)
       pipeBottom.physicsBody?.categoryBitMask = pipeCategory
-    pipeBottom.position = CGPointMake(CGRectGetMidX(self.frame) + self.frame.size.width, CGRectGetMidY(self.frame) - pipeBottom.size.height / 2 - gap / 2 + pipeOffset)
+    pipeBottom.position = CGPointMake(CGRectGetMidX(self.frame) + self.frame.size.width, CGRectGetMidY(self.frame) - pipeBottom.size.height / 2 - gapSize / 2 + pipeOffset)
     pipeBottom.physicsBody = SKPhysicsBody(rectangleOfSize:pipeBottom.size)
     pipeBottom.physicsBody?.dynamic = false
     pipeBottom.runAction(moveAndRemovePipes)
     self.addChild(pipeBottom)
-      
     
+      
+    // Create a Gap object for contact purposes and point accumulation
+    gap.position = CGPoint(x: CGRectGetMidX(self.frame) + self.frame.size.width, y: CGRectGetMidY(self.frame) + pipeOffset)
+    gap.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(pipeTop.size.width, gapSize))
+    gap.physicsBody?.categoryBitMask = gapCategory
+    gap.physicsBody?.contactTestBitMask = birdCategory
+    gap.physicsBody?.collisionBitMask = 0;
+    gap.physicsBody?.dynamic = false
+    gap.runAction(moveAndRemovePipes)
+    self.addChild(gap)
+    
+  }
+  
+  // Add sound function
+  func playSound(audio:String, shouldRepeat:Bool)
+  {
+    var sound = SKAction.playSoundFileNamed(audio, waitForCompletion: shouldRepeat)
+    runAction(sound)
   }
   
   func didBeginContact(contact: SKPhysicsContact){

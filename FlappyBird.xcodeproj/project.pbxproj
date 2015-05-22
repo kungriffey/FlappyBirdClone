@@ -15,6 +15,7 @@
 		2A6021FD1B0CCE5300B00D34 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2A6021FC1B0CCE5300B00D34 /* Images.xcassets */; };
 		2A6022001B0CCE5300B00D34 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A6021FE1B0CCE5300B00D34 /* LaunchScreen.xib */; };
 		2A60220C1B0CCE5300B00D34 /* FlappyBirdTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A60220B1B0CCE5300B00D34 /* FlappyBirdTests.swift */; };
+		2AB2635E1B0F7CE70043F06D /* super.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2AB2635D1B0F7CE70043F06D /* super.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,7 @@
 		2A6022051B0CCE5300B00D34 /* FlappyBirdTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlappyBirdTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A60220A1B0CCE5300B00D34 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2A60220B1B0CCE5300B00D34 /* FlappyBirdTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlappyBirdTests.swift; sourceTree = "<group>"; };
+		2AB2635D1B0F7CE70043F06D /* super.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = super.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 		2A6021EF1B0CCE5300B00D34 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2AB2635D1B0F7CE70043F06D /* super.mp3 */,
 				2A6021F01B0CCE5300B00D34 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -199,6 +202,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A6022001B0CCE5300B00D34 /* LaunchScreen.xib in Resources */,
+				2AB2635E1B0F7CE70043F06D /* super.mp3 in Resources */,
 				2A6021FD1B0CCE5300B00D34 /* Images.xcassets in Resources */,
 				2A6021F41B0CCE5300B00D34 /* GameScene.sks in Resources */,
 				2A6021FB1B0CCE5300B00D34 /* Main.storyboard in Resources */,
@@ -417,6 +421,7 @@
 				2A6022111B0CCE5300B00D34 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2A6022121B0CCE5300B00D34 /* Build configuration list for PBXNativeTarget "FlappyBirdTests" */ = {
 			isa = XCConfigurationList;
@@ -425,6 +430,7 @@
 				2A6022141B0CCE5300B00D34 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
