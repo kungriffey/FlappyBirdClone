@@ -13,7 +13,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // Create a sprite node
   var bird = SKSpriteNode()
   var background = SKSpriteNode()
-  var gap = SKSpriteNode()
+  var gameOver = SKSpriteNode()
+  //var gap = SKSpriteNode()
   
   let birdCategory:UInt32 = 0x1 << 0
   let groundCategory:UInt32 = 0x1 << 1
@@ -21,11 +22,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   let gapCategory:UInt32 = 0x1 << 3
 
   
-      override func didMoveToView(view: SKView) {
+  override func didMoveToView(view: SKView) {
       /* Setup your scene here */
         self.physicsWorld.contactDelegate = self
         playSoundFileNamed("super.mp3", shouldRepeat: true)
- 
         
       var birdTexture = SKTexture(imageNamed: "flappy1")
       // assign texture to the node
@@ -66,10 +66,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       sky.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(self.frame.size.width, 5))
       sky.physicsBody?.dynamic = false
 
-      
-      // Add Sound
-      
-
+      // Add all objects
       addChild(ground)
       addChild(sky)
       addChild(bird)
@@ -96,7 +93,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       //  Set up Timer
       var timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: Selector("makePipes"), userInfo: nil, repeats: true)
     }
-  
+
+  //  Add Pipes
     func makePipes() {
       
     // Movement amount
@@ -109,9 +107,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var removePipe = SKAction.removeFromParent()
     // Move and Remove Pipes
     var moveAndRemovePipes = SKAction.sequence([movePipes,removePipe])
-      
     // Create a Gap object for calculation purposes for pipes
-    let gapSize = bird.frame.size.height * 4
+    let gapSize = bird.frame.size.height * 3
     
     // Create Pipes
     var pipe1 = SKTexture(imageNamed: "pipe1")
@@ -135,6 +132,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
       
     // Create a Gap object for contact purposes and point accumulation
+    var gap = SKSpriteNode()
     gap.position = CGPoint(x: CGRectGetMidX(self.frame) + self.frame.size.width, y: CGRectGetMidY(self.frame) + pipeOffset)
     gap.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(pipeTop.size.width, gapSize))
     gap.physicsBody?.categoryBitMask = gapCategory
@@ -152,7 +150,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     runAction(sound)
   }
   
-  
+  // Contact Delegate Method
   func didBeginContact(contact: SKPhysicsContact){
     
     if(contact.bodyA.categoryBitMask == gapCategory || contact.bodyB.categoryBitMask == gapCategory) {
@@ -160,11 +158,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       println("+1")
       
     } else {
-      println("Pipe")
+      //println("game over")
+      var gameOverTexture = SKTexture(imageNamed: "gameover")
+//      gameOver = SKSpriteNode(texture: gameOverTexture)
+      gameOver = SKSpriteNode(texture: gameOverTexture)
+      gameOver.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame))
+      gameOver.zPosition = 10
+      addChild(gameOver)
     }
     
   }
   
+  //  Touches Function to launch bird along y axis 50px
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         /* Called when a touch begins */
         bird.physicsBody?.velocity = CGVectorMake(0, 0)
