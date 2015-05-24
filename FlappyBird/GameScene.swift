@@ -16,6 +16,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   var gameOver = SKSpriteNode()
   //var gap = SKSpriteNode()
   
+  //  Categories using binary logic
   let birdCategory:UInt32 = 0x1 << 0
   let groundCategory:UInt32 = 0x1 << 1
   let pipeCategory:UInt32 = 0x1 << 2
@@ -30,6 +31,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       var birdTexture = SKTexture(imageNamed: "flappy1")
       // assign texture to the node
       bird = SKSpriteNode(texture: birdTexture)
+      bird.setScale(0.7)
       bird.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame))
       
       // Create second texture
@@ -94,7 +96,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       var timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: Selector("makePipes"), userInfo: nil, repeats: true)
     }
 
-  //  Add Pipes
+    //  Add Pipes
     func makePipes() {
       
     // Movement amount
@@ -108,7 +110,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // Move and Remove Pipes
     var moveAndRemovePipes = SKAction.sequence([movePipes,removePipe])
     // Create a Gap object for calculation purposes for pipes
-    let gapSize = bird.frame.size.height * 3
+    let gapSize = bird.frame.size.height * 5
     
     // Create Pipes
     var pipe1 = SKTexture(imageNamed: "pipe1")
@@ -117,6 +119,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     pipeTop.position = CGPoint(x: CGRectGetMidX(self.frame) + self.frame.size.width, y: CGRectGetMidY(self.frame) + pipeTop.size.height / 2 + gapSize / 2 + pipeOffset)
     pipeTop.physicsBody = SKPhysicsBody(rectangleOfSize:pipeTop.size)
     pipeTop.physicsBody?.dynamic = false
+    pipeTop.setScale(1)
     //pipeTop.physicsBody?.categoryBitMask
     pipeTop.runAction(moveAndRemovePipes)
     self.addChild(pipeTop)
@@ -127,6 +130,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     pipeBottom.position = CGPointMake(CGRectGetMidX(self.frame) + self.frame.size.width, CGRectGetMidY(self.frame) - pipeBottom.size.height / 2 - gapSize / 2 + pipeOffset)
     pipeBottom.physicsBody = SKPhysicsBody(rectangleOfSize:pipeBottom.size)
     pipeBottom.physicsBody?.dynamic = false
+      pipeBottom.setScale(1)
     pipeBottom.runAction(moveAndRemovePipes)
     self.addChild(pipeBottom)
     
@@ -144,36 +148,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
   }
   
-  // Add sound function
-  func playSoundFileNamed(soundFile: String, shouldRepeat: Bool) {
+    // Add sound function
+    func playSoundFileNamed(soundFile: String, shouldRepeat: Bool) {
     var sound = SKAction.playSoundFileNamed(soundFile, waitForCompletion: shouldRepeat)
     runAction(sound)
   }
   
-  // Contact Delegate Method
-  func didBeginContact(contact: SKPhysicsContact){
+    // Contact Delegate Method
+    func didBeginContact(contact: SKPhysicsContact){
+      if(contact.bodyA.categoryBitMask == gapCategory || contact.bodyB.categoryBitMask == gapCategory) {
+        println("+1")
+      } else {
+     
+        //println("game over")
+        var gameOverTexture = SKTexture(imageNamed: "gameover")
+        gameOver = SKSpriteNode(texture: gameOverTexture)
+        gameOver.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame))
+        gameOver.zPosition = 6
+        //addChild(gameOver)
+      }
     
-    if(contact.bodyA.categoryBitMask == gapCategory || contact.bodyB.categoryBitMask == gapCategory) {
-      
-      println("+1")
-      
-    } else {
-      //println("game over")
-      var gameOverTexture = SKTexture(imageNamed: "gameover")
-//      gameOver = SKSpriteNode(texture: gameOverTexture)
-      gameOver = SKSpriteNode(texture: gameOverTexture)
-      gameOver.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame))
-      gameOver.zPosition = 10
-      addChild(gameOver)
     }
-    
-  }
   
   //  Touches Function to launch bird along y axis 50px
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         /* Called when a touch begins */
         bird.physicsBody?.velocity = CGVectorMake(0, 0)
-        bird.physicsBody?.applyImpulse(CGVectorMake(0, 50))
+        bird.physicsBody?.applyImpulse(CGVectorMake(0, 30))
         for touch in (touches as! Set<UITouch>) {
             let location = touch.locationInNode(self)
           
