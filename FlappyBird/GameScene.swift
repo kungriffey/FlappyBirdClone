@@ -161,11 +161,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       } else {
      
         //println("game over")
+        self.speed = 0
         var gameOverTexture = SKTexture(imageNamed: "gameover")
         gameOver = SKSpriteNode(texture: gameOverTexture)
         gameOver.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame))
         gameOver.zPosition = 6
-        //addChild(gameOver)
+        addChild(gameOver)
+        bird.removeFromParent()
       }
     
     }
